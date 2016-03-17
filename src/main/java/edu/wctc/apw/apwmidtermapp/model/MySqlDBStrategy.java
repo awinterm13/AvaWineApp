@@ -49,7 +49,7 @@ import javax.sql.DataSource;
  * @author andre_000
  */
 @Dependent
-public class MySqlDBStrategy implements Serializable {
+public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
 
     private Connection conn;
 
@@ -70,6 +70,7 @@ public class MySqlDBStrategy implements Serializable {
      *
      */
 
+    @Override
     public final void openConnection(DataSource ds) throws DatabaseAccessException {
         try {
             conn = ds.getConnection();
@@ -83,6 +84,7 @@ public class MySqlDBStrategy implements Serializable {
     // Which Why Would you... If your server doesn't support it I suppose. 
     // Needs Custom Exception
 
+    @Override
     public final void openConnection(String driverClass, String url,
             String userName, String password) throws DatabaseAccessException {
 
@@ -99,6 +101,7 @@ public class MySqlDBStrategy implements Serializable {
 
     // Jim has a hahahahahaha... do I need a finally? 
 
+    @Override
     public final void closeConnection() throws DatabaseAccessException {
         try {
             conn.close();
@@ -119,6 +122,7 @@ public class MySqlDBStrategy implements Serializable {
      * @throws java.sql.SQLException
      */
  
+    @Override
     public final List<Map<String, Object>> findAllRecords(String tableName,
             int maxRecords) throws DatabaseAccessException {
 
@@ -170,6 +174,7 @@ public class MySqlDBStrategy implements Serializable {
     }
 
 
+    @Override
     public final Map<String, Object> findById(String tableName, String primaryKey,
             Object primaryKeyValue) throws DatabaseAccessException {
 
@@ -220,6 +225,7 @@ public class MySqlDBStrategy implements Serializable {
      * @throws java.sql.SQLException
      */
 
+    @Override
     public final int deleteById(String tableName, String primaryKeyFieldName, Object primaryKeyValue) throws DatabaseAccessException {
 
         String sql = "delete from " + tableName + " where " + primaryKeyFieldName + " =?";
@@ -242,6 +248,7 @@ public class MySqlDBStrategy implements Serializable {
     }
 
     // this is Jims... in my bookwebapp I do not believe I used it. I think I used my create meathod... So I'll have to review that.
+    @Override
     public final boolean insertRecord(String tableName, List colDescriptors, List colValues) throws DatabaseAccessException {
 
         PreparedStatement pstmt = null;
@@ -286,6 +293,7 @@ public class MySqlDBStrategy implements Serializable {
 
     // this was my create method. It worked. I used it. Delete it if you don't end up using it. 
 
+    @Override
     public int createNewRecordInTable(String tableName, ArrayList<String> record) throws SQLException {
 
         //     String sql = "INSERT INTO table_name (column1,column2,column3,...)\n" +
@@ -336,6 +344,7 @@ public class MySqlDBStrategy implements Serializable {
     }
 
 
+    @Override
     public final int updateRecords(String tableName, List columnNames, List columnValues,
             String whereField, Object whereValue)
             throws DatabaseAccessException {
