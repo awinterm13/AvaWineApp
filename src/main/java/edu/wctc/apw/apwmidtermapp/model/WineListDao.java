@@ -18,7 +18,7 @@ import javax.sql.DataSource;
  *
  * @author andre_000
  */
-public class WineListDao implements Serializable {
+public class WineListDao implements Serializable, WineListDaoStrategy {
     
     @Inject
     private DatabaseStrategy dbStrat;
@@ -40,11 +40,13 @@ public class WineListDao implements Serializable {
     }
     
     // this one for injection... and pooling I think
+    @Override
     public final void initDao(DataSource dataSource) throws DatabaseAccessException {
         this.dataSource = dataSource;
     }
     
     // setters are used because validation in the setters validates these params.
+    @Override
     public final void initDao(String driver, String url, String userName, String password){
         setDriver(driver);
         setUrl(url);
@@ -53,6 +55,7 @@ public class WineListDao implements Serializable {
     }
     
     
+    @Override
     public final Wine getWineById(Integer wineId) throws DatabaseAccessException {
         
         if (dataSource == null){
@@ -70,6 +73,7 @@ public class WineListDao implements Serializable {
         return wine;
     }
 
+    @Override
     public final List<Wine> getWineList() throws DatabaseAccessException {
          if (dataSource == null){
             dbStrat.openConnection(driver, url, userName, password);
@@ -102,6 +106,7 @@ public class WineListDao implements Serializable {
     }
     
     
+    @Override
     public final boolean deleteWineById(Integer wineId) throws DatabaseAccessException {
         if (dataSource == null){
             dbStrat.openConnection(driver, url, userName, password);
@@ -118,6 +123,7 @@ public class WineListDao implements Serializable {
         }
     }
         
+    @Override
     public final boolean saveWine(Integer wineId, String wineName, double price, String imageUrl) throws DatabaseAccessException {
         if (dataSource == null){
             dbStrat.openConnection(driver, url, userName, password);
@@ -149,50 +155,62 @@ public class WineListDao implements Serializable {
     
     
     
+    @Override
     public final DatabaseStrategy getDbStrat() {
         return dbStrat;
     }
 
+    @Override
     public final void setDbStrat(DatabaseStrategy dbStrat) {
         this.dbStrat = dbStrat;
     }
 
+    @Override
     public final DataSource getDataSource() {
         return dataSource;
     }
 
+    @Override
     public final void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    @Override
     public final String getDriver() {
         return driver;
     }
 
+    @Override
     public final void setDriver(String driver) {
         this.driver = driver;
     }
 
+    @Override
     public final String getUrl() {
         return url;
     }
 
+    @Override
     public final void setUrl(String url) {
         this.url = url;
     }
 
+    @Override
     public final String getUserName() {
         return userName;
     }
 
+    @Override
     public final void setUserName(String userName) {
         this.userName = userName;
     }
 
+    @Override
     public final String getPassword() {
         return password;
     }
 
+    @Override
     public final void setPassword(String password) {
         this.password = password;
     }
