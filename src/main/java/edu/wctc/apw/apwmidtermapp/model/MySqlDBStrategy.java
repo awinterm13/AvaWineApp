@@ -420,7 +420,7 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
     
     private PreparedStatement buildInsertStatement(Connection conn, String tableName, List columnDescriptors)
             throws DatabaseAccessException{
-        StringBuffer sql = new StringBuffer("INSERT INTO");
+        StringBuffer sql = new StringBuffer("INSERT INTO ");
          (sql.append(tableName)).append(" (");
          final Iterator i = columnDescriptors.iterator();
         while (i.hasNext()) {
@@ -517,5 +517,14 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
 //        System.out.println(rawData);
 //
 //    }
-
+      // test comment out for production
+    public static void main(String[] args) throws DatabaseAccessException {
+        System.out.println("Running");
+        MySqlDBStrategy db = new MySqlDBStrategy();
+        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/ava_wine", "root", "admin");
+        System.out.println(db.findAllRecords("wine", 0).toString());
+        db.closeConnection();
+    }
+    
+    
 }

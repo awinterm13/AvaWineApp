@@ -30,7 +30,7 @@ public class WineListDao implements Serializable, WineListDaoStrategy {
     private String userName;
     private String password;
     
-    private final String TABLE_NAME = "wine_list";
+    private final String TABLE_NAME = "wine";
     private final String PRIMARY_KEY_FIELD_NAME = "wine_id";
     private final String WINE_NAME = "wine_name";
     private final String WINE_PRICE = "wine_price";
@@ -215,6 +215,16 @@ public class WineListDao implements Serializable, WineListDaoStrategy {
         this.password = password;
     }
     
-    
-    
+    // test comment out for production
+    public static void main(String[] args) throws DatabaseAccessException {
+        WineListDao dao = new WineListDao();
+        dao.setDbStrat(new MySqlDBStrategy());
+        dao.initDao("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/ava_wine", "root", "admin");
+        System.out.println(dao.getWineList().toString());
+        System.out.println(dao.getWineById(3).toString());
+        dao.deleteWineById(3);
+        System.out.println(dao.getWineList().toString());
+        dao.saveWine(null, "sweet berry wine", 4.95, "monkeydogdog");
+        System.out.println(dao.getWineList().toString());
+    }
 }
