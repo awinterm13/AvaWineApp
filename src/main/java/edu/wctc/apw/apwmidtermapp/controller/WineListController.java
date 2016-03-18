@@ -5,13 +5,24 @@
  */
 package edu.wctc.apw.apwmidtermapp.controller;
 
+import edu.wctc.apw.apwmidtermapp.model.Wine;
+import edu.wctc.apw.apwmidtermapp.model.WineService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.inject.Inject;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 /**
  *
@@ -19,7 +30,20 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "WineListController", urlPatterns = {"/WineListController"})
 public class WineListController extends HttpServlet {
-
+    
+    private static final String ACTION_PARAMETER = "action";
+    private static final String WINE_LIST_PAGE = "/wineListPage.jsp";
+    private static final String GET_WINE_LIST_ACTION = "getWineList";
+    
+    private String driverClass;
+    private String url;
+    private String userName;
+    private String password;
+    private String dbJndiName; 
+    
+    @Inject
+     private WineService wineServ;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,10 +56,47 @@ public class WineListController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        
+        String destination = WINE_LIST_PAGE;
+        String action = request.getParameter(ACTION_PARAMETER);
+        
+        try  {
+             
+      
+            
+            
+            configDbConnection();
+        switch (action) {
+                case GET_WINE_LIST_ACTION:
+                        // Jim made a method out of this. If I reuse these two lines I will do the same.
+                        this.refreshList(request, wineServ);
+                        // if you have two or more pages this tool can send to then this next line is smart.
+                        destination = WINE_LIST_PAGE;
+                    break;
             
         }
+    }   catch (Exception e) { 
+            request.setAttribute("errMsg", e.getMessage());
+        } 
+        
+        RequestDispatcher view =
+                    request.getRequestDispatcher(destination);
+           view.forward(request, response);
     }
+        
+        private void configDbConnection() throws NamingException, Exception { 
+        if(dbJndiName == null) {
+            wineServ.getDao().initDao(driverClass, url, userName, password);   
+        } else {
+            /*
+             Lookup the JNDI name of the Glassfish connection pool
+             and then use it to create a DataSource object.
+             */
+            Context ctx = new InitialContext();
+            DataSource ds = (DataSource) ctx.lookup(dbJndiName);
+            wineServ.getDao().initDao(ds);
+        }
+        }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -75,5 +136,21 @@ public class WineListController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+     @Override
+    public void init() throws ServletException {
+//        driverClass = getServletContext().getInitParameter("db.driver.class");
+//        url = getServletContext().getInitParameter("db.url");
+//        userName = getServletContext().getInitParameter("db.username");
+//        password = getServletContext().getInitParameter("db.password");
+        dbJndiName = getServletContext().getInitParameter("db.jndi.name");
+    }
+    
+     private void refreshList(HttpServletRequest request, WineService wineServ) throws Exception {
+        List<Wine> wineList = wineServ.getAllWines();
+         System.out.println(wineList.toString());
+        request.setAttribute("wineList", wineList);
+    }
+    
 
 }

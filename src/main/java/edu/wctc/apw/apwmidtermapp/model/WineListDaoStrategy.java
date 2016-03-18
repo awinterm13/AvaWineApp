@@ -7,12 +7,15 @@ package edu.wctc.apw.apwmidtermapp.model;
 
 import edu.wctc.apw.apwmidtermapp.exception.DatabaseAccessException;
 import java.util.List;
+import javax.enterprise.context.Dependent;
 import javax.sql.DataSource;
 
 /**
  *
  * @author andre_000
  */
+// not in Jims copy but it is in his instructions regarding this topic.
+@Dependent
 public interface WineListDaoStrategy {
 
     boolean deleteWineById(Integer wineId) throws DatabaseAccessException;
