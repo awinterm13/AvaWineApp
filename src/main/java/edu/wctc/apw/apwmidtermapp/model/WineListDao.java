@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
@@ -18,6 +19,7 @@ import javax.sql.DataSource;
  *
  * @author andre_000
  */
+@Dependent
 public class WineListDao implements Serializable, WineListDaoStrategy {
     
     @Inject
@@ -220,11 +222,12 @@ public class WineListDao implements Serializable, WineListDaoStrategy {
         WineListDao dao = new WineListDao();
         dao.setDbStrat(new MySqlDBStrategy());
         dao.initDao("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/ava_wine", "root", "admin");
+ 
         System.out.println(dao.getWineList().toString());
-        System.out.println(dao.getWineById(3).toString());
-        dao.deleteWineById(3);
+        System.out.println(dao.getWineById(5).toString());
+        dao.deleteWineById(5);
         System.out.println(dao.getWineList().toString());
-        dao.saveWine(null, "sweet berry wine", 4.95, "monkeydogdog");
+        dao.saveWine(null, "plungerhead", 4.95, "monkeydogdog");
         System.out.println(dao.getWineList().toString());
     }
 }
