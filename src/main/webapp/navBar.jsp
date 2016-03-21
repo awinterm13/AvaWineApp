@@ -21,7 +21,7 @@
             </div>
             <div class="collapse navbar-collapse" id="collapse-menu"  >
                 <ul class="nav navbar-nav navbar-right" >
-                    <li class="active"><a href="index.html" style="background-color: black; color: ghostwhite;">Home</a></li>
+                    <li class="active"><a href=<%= response.encodeURL("index.html") %> style="background-color: black; color: ghostwhite;">Home</a></li>
                 </ul>
            </div>
         </div>

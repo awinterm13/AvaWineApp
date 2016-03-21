@@ -19,17 +19,14 @@
          <jsp:include page="navBar.jsp" />
         <h1>Hello sluts welcome to the ADD EDIT PAGE.</h1>
         
-         <form method="POST" action="<%= response.encodeURL("WineListController")%>">
+        <form method="POST" action="<%= response.encodeURL("WineListController")%>" onsubmit="return validateFormAddEdit()" name="addEdit">
             <table width="500" border="1" cellspacing="0" cellpadding="4">
                
-                <c:choose>
-                    <c:when test="${not empty wine}">
-                        <tr>
-                            <td style="background-color: black;color:white;" align="left">Product ID</td>
-                            <td align="left"><input type="text" value="${wine.productId}" name="wineID" readonly/></td>
+              
+                        <tr> 
+                            <td align="left"><input type="text" value="${wine.productId}" name="wineID" hidden /></td>
                         </tr>         
-                    </c:when>
-                </c:choose>
+            
                 
                 <tr>
                     <td style="background-color: black;color:white;" align="left">Product Name</td>
@@ -39,7 +36,7 @@
                
                 <tr>
                     <td style="background-color: black;color:white;" align="left">Price</td>
-                    <td align="left"><input type="text" value="${wine.productPrice}" name="price"  /></td>
+                    <td align="left"><input type="text" value="${wine.productPrice}" name="price" required /></td>
                    
                 </tr>
                 
@@ -53,12 +50,13 @@
                 
                  <tr>
                     <td style="background-color: black;color:white;" align="left">Image URL</td>
-                    <td align="left"><input type="text" value="${wine.imageURL}" name="imageUrl"  /></td>
+                    <td align="left"><input type="text" value="${wine.imageURL}" name="imageUrl" required /></td>
                    
                 </tr>
                 
             </table>
         </form>
                     <jsp:include page="footer.jsp" />
+                    <script src="formValidation.js" type="text/javascript"></script>
     </body>
 </html>

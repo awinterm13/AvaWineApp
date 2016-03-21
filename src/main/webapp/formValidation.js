@@ -5,14 +5,39 @@
  */
 
 function validateForm() {
-    var x = document.forms["myForm"]["fname"].value;
+    var x = document.forms["login"]["password"].value;
+    var y = document.forms["login"]["username"].value;
     if (x == null || x == "") {
-        alert("Name must be filled out");
+        alert("Password must be filled out");
+        return false;
+    }
+       if (y == null || y == "") {
+        alert("Username must be filled out");
         return false;
     }
 }
 
-<form name="myForm" action="demo_form.asp" onsubmit="return validateForm()" method="post">
+function validateFormAddEdit() {
+    var x = document.forms["addEdit"]["productName"].value;
+    var y = document.forms["addEdit"]["price"].value;
+    var z = document.forms["addEdit"]["imageUrl"].value;
+    if (x == null || x == "") {
+        alert("Password must be filled out");
+        return false;
+    }
+       if (y == null || y == "") {
+        alert("Username must be filled out");
+        return false;
+    }
+      if (z == null || z == "") {
+        alert("Username must be filled out");
+        return false;
+    }
+}
+    
+
+/**
+ * <form name="myForm" action="demo_form.asp" onsubmit="return validateForm()" method="post">
 Name: <input type="text" name="fname">
 <input type="submit" value="Submit">
 </form>
@@ -28,3 +53,5 @@ HTML Form Example
   <input type="submit" value="Submit">
 </form>
 Try it Yourself »
+ */
+

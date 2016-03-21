@@ -26,7 +26,7 @@
             <div class="row">
                 <h1>Ava Wine List</h1>
                 <div class="col-md-8 ScrollStyle">
-                    <form method="POST" action="WineListController">
+                    <form method="POST" action=<%= response.encodeURL("WineListController") %>>
                         <input type="hidden" name="action" value="addEditDelete" />
                         <input class="btn"  type="submit" name="submit" value="Add"  />
                     </form>

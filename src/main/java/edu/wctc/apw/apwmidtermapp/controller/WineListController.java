@@ -95,6 +95,7 @@ public class WineListController extends HttpServlet {
                         Wine wine = wineServ.getWineById(wineId);
                         request.setAttribute("wine", wine);
                     } else if (subAction.equals(ADD_ACTION)){
+                        request.setAttribute("wine", null);
                         destination = ADD_EDIT_PAGE;   
                            }
                    break;
@@ -121,8 +122,8 @@ public class WineListController extends HttpServlet {
         } 
         
         RequestDispatcher view =
-                    request.getRequestDispatcher(destination);
-           view.forward(request, response);
+                getServletContext().getRequestDispatcher(response.encodeURL(destination));
+                view.forward(request, response);
     }
         
         private void configDbConnection() throws NamingException, Exception { 
