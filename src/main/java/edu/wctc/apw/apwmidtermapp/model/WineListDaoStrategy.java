@@ -16,44 +16,44 @@ import javax.sql.DataSource;
  */
 // not in Jims copy but it is in his instructions regarding this topic.
 @Dependent
-public interface WineListDaoStrategy {
+public abstract interface WineListDaoStrategy {
 
-    boolean deleteWineById(Integer wineId) throws DatabaseAccessException;
+    public abstract boolean deleteWineById(Integer wineId) throws DatabaseAccessException;
 
-    DataSource getDataSource();
+    public abstract DataSource getDataSource();
 
-    DatabaseStrategy getDbStrat();
+    public abstract DatabaseStrategy getDbStrat();
 
-    String getDriver();
+    public abstract String getDriver();
 
-    String getPassword();
+    public abstract String getPassword();
 
-    String getUrl();
+    public abstract String getUrl();
 
-    String getUserName();
+    public abstract String getUserName();
 
-    Wine getWineById(Integer wineId) throws DatabaseAccessException;
+    public abstract Wine getWineById(Integer wineId) throws DatabaseAccessException;
 
-    List<Wine> getWineList() throws DatabaseAccessException;
+    public abstract List<Wine> getWineList() throws DatabaseAccessException;
 
     // this one for injection... and pooling I think
-    void initDao(DataSource dataSource) throws DatabaseAccessException;
+    public abstract void initDao(DataSource dataSource) throws DatabaseAccessException;
 
     // setters are used because validation in the setters validates these params.
-    void initDao(String driver, String url, String userName, String password);
+    public abstract void initDao(String driver, String url, String userName, String password);
 
-    boolean saveWine(Integer wineId, String wineName, double price, String imageUrl) throws DatabaseAccessException;
+    public abstract boolean saveWine(Integer wineId, String wineName, double price, String imageUrl) throws DatabaseAccessException;
 
-    void setDataSource(DataSource dataSource);
+    public abstract void setDataSource(DataSource dataSource);
 
-    void setDbStrat(DatabaseStrategy dbStrat);
+    public abstract void setDbStrat(DatabaseStrategy dbStrat);
 
-    void setDriver(String driver);
+    public abstract void setDriver(String driver);
 
-    void setPassword(String password);
+    public abstract void setPassword(String password);
 
-    void setUrl(String url);
+    public abstract void setUrl(String url);
 
-    void setUserName(String userName);
+    public abstract void setUserName(String userName);
     
 }

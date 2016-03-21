@@ -6,6 +6,7 @@
 package edu.wctc.apw.apwmidtermapp.model;
 
 import edu.wctc.apw.apwmidtermapp.exception.DatabaseAccessException;
+import edu.wctc.apw.apwmidtermapp.exception.QueryParameterMissingException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +44,7 @@ public class WineListDao implements Serializable, WineListDaoStrategy {
     
     // this one for injection... and pooling I think
     @Override
-    public final void initDao(DataSource dataSource) throws DatabaseAccessException {
+    public final void initDao(DataSource dataSource) throws DatabaseAccessException { 
         this.dataSource = dataSource;
     }
     
@@ -109,7 +110,13 @@ public class WineListDao implements Serializable, WineListDaoStrategy {
     
     
     @Override
-    public final boolean deleteWineById(Integer wineId) throws DatabaseAccessException {
+    public final boolean deleteWineById(Integer wineId) throws DatabaseAccessException  {
+          if( wineId == null || wineId < 0){
+            throw new QueryParameterMissingException();
+          }
+        
+        
+        
         if (dataSource == null){
             dbStrat.openConnection(driver, url, userName, password);
         } else {
@@ -127,6 +134,20 @@ public class WineListDao implements Serializable, WineListDaoStrategy {
         
     @Override
     public final boolean saveWine(Integer wineId, String wineName, double price, String imageUrl) throws DatabaseAccessException {
+        
+        System.out.println("This happened too!");
+         if(wineName.isEmpty() || wineName == null ) {
+//             System.out.println("NAME PROBLEM");
+            throw new QueryParameterMissingException();
+        } if(price < 0 || price > 500){
+//            System.out.println("PRICE IS THE PROBLEM");
+            throw new QueryParameterMissingException();
+        } if(imageUrl.isEmpty() || imageUrl == null ) {
+//            System.out.println("its the URL");
+            throw new QueryParameterMissingException();
+        }
+       
+//         System.out.println("HERE WE ARE! 1");
         if (dataSource == null){
             dbStrat.openConnection(driver, url, userName, password);
         } else {
@@ -134,11 +155,12 @@ public class WineListDao implements Serializable, WineListDaoStrategy {
         }
         
         boolean result = false;
-        
+//        System.out.println("HERE WE ARE! 2");
         if(wineId == null || wineId.equals(0)){
             // new record
             result = dbStrat.insertRecord(TABLE_NAME, Arrays.asList(WINE_NAME, WINE_PRICE, WINE_IMAGE_URL ), 
                     Arrays.asList(wineName, price, imageUrl));
+            System.out.println("THIS!!!!!");
         } else {
             // updating an existing record
             int recsUpdated = dbStrat.updateRecords(TABLE_NAME, Arrays.asList(WINE_NAME, WINE_PRICE, WINE_IMAGE_URL ), 
@@ -224,10 +246,10 @@ public class WineListDao implements Serializable, WineListDaoStrategy {
         dao.initDao("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/ava_wine", "root", "admin");
  
         System.out.println(dao.getWineList().toString());
-        System.out.println(dao.getWineById(5).toString());
-        dao.deleteWineById(5);
-        System.out.println(dao.getWineList().toString());
-        dao.saveWine(null, "plungerhead", 4.95, "monkeydogdog");
-        System.out.println(dao.getWineList().toString());
+//        System.out.println(dao.getWineById(5).toString());
+//        dao.deleteWineById(5);
+//        System.out.println(dao.getWineList().toString());
+//        dao.saveWine(null, "plungerhead", 4.95, "monkeydogdog");
+//        System.out.println(dao.getWineList().toString());
     }
 }

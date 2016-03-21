@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package edu.wctc.apw.apwmidtermapp.model;
-
+ 
 // This is where your custom exception import goes..
 import edu.wctc.apw.apwmidtermapp.exception.DatabaseAccessException;
 

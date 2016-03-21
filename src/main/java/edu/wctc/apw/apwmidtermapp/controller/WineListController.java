@@ -34,6 +34,15 @@ public class WineListController extends HttpServlet {
     private static final String ACTION_PARAMETER = "action";
     private static final String WINE_LIST_PAGE = "/wineListPage.jsp";
     private static final String GET_WINE_LIST_ACTION = "getWineList";
+    private static final String ADD_EDIT_DELETE = "addEditDelete";
+    private static final String WINE_ID_PARAMETER_KEY = "wineID";
+    private static final String SUBMIT_ACTION = "submit";
+     private static final String DELETE_ACTION = "Delete";
+     private static final String EDIT_ACTION = "Edit";
+     private static final String ADD_EDIT_PAGE = "/addEdit.jsp";
+    private static final String ADD_ACTION = "Add";
+    private static final String CANCEL_ACTION = "Cancel";
+    private static final String SAVE_ACTION = "Save";
     
     private String driverClass;
     private String url;
@@ -72,6 +81,38 @@ public class WineListController extends HttpServlet {
                         this.refreshList(request, wineServ);
                         // if you have two or more pages this tool can send to then this next line is smart.
                         destination = WINE_LIST_PAGE;
+                    break;
+                case ADD_EDIT_DELETE:
+                    String subAction = request.getParameter(SUBMIT_ACTION);
+                    String wineId = request.getParameter(WINE_ID_PARAMETER_KEY);
+                    
+                     if (subAction.equals(DELETE_ACTION)) {
+                         wineServ.deleteWineById(wineId);
+                         this.refreshList(request, wineServ);
+                         destination = WINE_LIST_PAGE;
+                    } else if(subAction.equals(EDIT_ACTION)){
+                        destination = ADD_EDIT_PAGE;
+                        Wine wine = wineServ.getWineById(wineId);
+                        request.setAttribute("wine", wine);
+                    } else if (subAction.equals(ADD_ACTION)){
+                        destination = ADD_EDIT_PAGE;   
+                           }
+                   break;
+                
+                case CANCEL_ACTION:
+                    this.refreshList(request, wineServ);
+                    destination = WINE_LIST_PAGE;
+                    break; 
+                    
+                case SAVE_ACTION:
+                    String wineName = request.getParameter("productName");
+                    String price = request.getParameter("price");
+                    String imageUrl = request.getParameter("imageUrl");
+                    String Id = request.getParameter(WINE_ID_PARAMETER_KEY);
+                    System.out.println("THIS HAPPENED. " + wineName + price + imageUrl + Id);
+                    wineServ.saveOrUpdateWine(Id, wineName, Double.parseDouble(price), imageUrl);
+                    this.refreshList(request, wineServ);
+                    destination = WINE_LIST_PAGE;
                     break;
             
         }
@@ -139,10 +180,10 @@ public class WineListController extends HttpServlet {
 
      @Override
     public void init() throws ServletException {
-//        driverClass = getServletContext().getInitParameter("db.driver.class");
-//        url = getServletContext().getInitParameter("db.url");
-//        userName = getServletContext().getInitParameter("db.username");
-//        password = getServletContext().getInitParameter("db.password");
+        driverClass = getServletContext().getInitParameter("db.driver.class");
+        url = getServletContext().getInitParameter("db.url");
+        userName = getServletContext().getInitParameter("db.username");
+        password = getServletContext().getInitParameter("db.password");
         dbJndiName = getServletContext().getInitParameter("db.jndi.name");
     }
     

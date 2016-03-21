@@ -21,11 +21,15 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     </head>
     <body>
+        <jsp:include page="navBar.jsp" />
             <div class="container" id="pageWrapper">
             <div class="row">
                 <h1>Ava Wine List</h1>
                 <div class="col-md-8 ScrollStyle">
-                    
+                    <form method="POST" action="WineListController">
+                        <input type="hidden" name="action" value="addEditDelete" />
+                        <input class="btn"  type="submit" name="submit" value="Add"  />
+                    </form>
 
                     <table class="table table-hover active">
                         <thead>
@@ -50,6 +54,15 @@
                                     <td>            
                                         <c:out value="${wine.productPrice}"/>
                                     </td>
+                                    <td>
+                                        <form method="POST" action="WineListController">
+                                            <input type="hidden" name="action" value="addEditDelete" />
+                                            <input type="hidden" name="wineID" value="${wine.productId}" />
+                                            
+                                            <input class="btn"  type="submit" name="submit" value="Edit"  />
+                                            <input class="btn"  type="submit" name="submit" value="Delete"  />
+                                        </form>
+                                    </td>    
                                 </tr>
                             </c:forEach>  
                         </tbody>
@@ -59,5 +72,6 @@
                 </div>
             </div>
         </div>
+                 <jsp:include page="footer.jsp" />
     </body>
 </html>
