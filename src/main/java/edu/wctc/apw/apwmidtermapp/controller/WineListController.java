@@ -5,6 +5,9 @@
  */
 package edu.wctc.apw.apwmidtermapp.controller;
 
+import edu.wctc.apw.apwmidtermapp.exception.DaoIsNullException;
+import edu.wctc.apw.apwmidtermapp.exception.DatabaseAccessException;
+import edu.wctc.apw.apwmidtermapp.exception.ParameterMissingException;
 import edu.wctc.apw.apwmidtermapp.model.Wine;
 import edu.wctc.apw.apwmidtermapp.model.WineService;
 import java.io.IOException;
@@ -45,6 +48,24 @@ public class WineListController extends HttpServlet {
     private static final String ADD_ACTION = "Add";
     private static final String CANCEL_ACTION = "Cancel";
     private static final String SAVE_ACTION = "Save";
+    private static final String LOG_OUT_ACTION = "logOut";
+    private static final String LOG_OUT_PAGE_URL = "/logOut.jsp";
+    private static final String ERROR_MSG_KEY = "errMsg";
+    private static final String IMAGE_URL_KEY = "imageUrl";
+    private static final String PRICE_KEY = "price";
+    private static final String PRODUCT_NAME_KEY = "productName";
+    private static final String WINE_KEY = "wine";
+    private static final String WINE_LIST_KEY = "wineList";
+   
+    private static final String DRIVER_CLASS_KEY = "db.driver.class";
+    private static final String DATABASE_URL_KEY = "db.url";
+    private static final String DATABASE_USERNAME_KEY = "db.username";
+    private static final String DATABASE_PASSWORD_KEY = "db.password";
+    private static final String DATABASE_JNDI_NAME_KEY = "db.jndi.name";
+    
+    private static final String FONT_COLOR_KEY = "fontColor";
+    private static final String USER_NAME_KEY = "username";
+    
     
     private String driverClass;
     private String url;
@@ -64,7 +85,7 @@ public class WineListController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected final void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
@@ -82,11 +103,11 @@ public class WineListController extends HttpServlet {
         switch (action) {
                 case GET_WINE_LIST_ACTION:
                         // Jim made a method out of this. If I reuse these two lines I will do the same.
-                        if(request.getParameter("username") != null || request.getParameter("username").length() > 0){
-                            session.setAttribute("name", request.getParameter("username"));
+                        if(request.getParameter(USER_NAME_KEY) != null || request.getParameter(USER_NAME_KEY).length() > 0){
+                            session.setAttribute(USER_NAME_KEY, request.getParameter(USER_NAME_KEY));
                         }
-                         if(request.getParameter("fontColor") != null || request.getParameter("fontColor").length() > 0){
-                             ctx.setAttribute("fontColor", request.getParameter("fontColor") );
+                         if(request.getParameter(FONT_COLOR_KEY) != null || request.getParameter(FONT_COLOR_KEY).length() > 0){
+                             ctx.setAttribute(FONT_COLOR_KEY, request.getParameter(FONT_COLOR_KEY) );
                          }
                          
                         this.refreshList(request, wineServ);
@@ -104,9 +125,9 @@ public class WineListController extends HttpServlet {
                     } else if(subAction.equals(EDIT_ACTION)){
                         destination = ADD_EDIT_PAGE;
                         Wine wine = wineServ.getWineById(wineId);
-                        request.setAttribute("wine", wine);
+                        request.setAttribute(WINE_KEY, wine);
                     } else if (subAction.equals(ADD_ACTION)){
-                        request.setAttribute("wine", null);
+                        request.setAttribute(WINE_KEY, null);
                         destination = ADD_EDIT_PAGE;   
                            }
                    break;
@@ -117,24 +138,35 @@ public class WineListController extends HttpServlet {
                     break; 
                     
                 case SAVE_ACTION:
-                    String wineName = request.getParameter("productName");
-                    String price = request.getParameter("price");
-                    String imageUrl = request.getParameter("imageUrl");
+                    try{
+                    String wineName = request.getParameter(PRODUCT_NAME_KEY);
+                    String price = request.getParameter(PRICE_KEY);
+                    String imageUrl = request.getParameter(IMAGE_URL_KEY);
                     String Id = request.getParameter(WINE_ID_PARAMETER_KEY);
-                    System.out.println("THIS HAPPENED. " + wineName + price + imageUrl + Id);
-                    wineServ.saveOrUpdateWine(Id, wineName, Double.parseDouble(price), imageUrl);
+//                    System.out.println("THIS HAPPENED. " + wineName + price + imageUrl + Id);
+                    wineServ.saveOrUpdateWine(Id, wineName, price, imageUrl);
                     this.refreshList(request, wineServ);
                     destination = WINE_LIST_PAGE;
+                    } catch (ParameterMissingException e){
+                        request.setAttribute(ERROR_MSG_KEY, e.getMessage());
+                        destination = ADD_EDIT_PAGE;
+                    }
                     break;
                     
-                case "logOut":
-                    destination = "/logOut.jsp";
+                case LOG_OUT_ACTION:
+                    destination = LOG_OUT_PAGE_URL;
                     break;
             
         }
-    }   catch (Exception e) { 
-            request.setAttribute("errMsg", e.getMessage());
-        } 
+    }   catch (DaoIsNullException e) { 
+            request.setAttribute(ERROR_MSG_KEY, e.getMessage());
+        } catch (ParameterMissingException e){
+            request.setAttribute(ERROR_MSG_KEY, e.getMessage());
+        } catch (DatabaseAccessException e){
+            request.setAttribute(ERROR_MSG_KEY, e.getMessage());
+        } catch (Exception e){
+            request.setAttribute(ERROR_MSG_KEY, e.getMessage());
+        }
         
         RequestDispatcher view =
                 getServletContext().getRequestDispatcher(response.encodeURL(destination));
@@ -193,20 +225,24 @@ public class WineListController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
+    /**
+     * Init method works for connection pooling or standard connection. 
+     * @throws ServletException 
+     */
      @Override
-    public void init() throws ServletException {
-        driverClass = getServletContext().getInitParameter("db.driver.class");
-        url = getServletContext().getInitParameter("db.url");
-        userName = getServletContext().getInitParameter("db.username");
-        password = getServletContext().getInitParameter("db.password");
-        dbJndiName = getServletContext().getInitParameter("db.jndi.name");
+    public final void init() throws ServletException {
+        driverClass = getServletContext().getInitParameter(DRIVER_CLASS_KEY);
+        url = getServletContext().getInitParameter(DATABASE_URL_KEY);
+        userName = getServletContext().getInitParameter(DATABASE_USERNAME_KEY);
+        password = getServletContext().getInitParameter(DATABASE_PASSWORD_KEY);
+        dbJndiName = getServletContext().getInitParameter(DATABASE_JNDI_NAME_KEY);
     }
     
      private void refreshList(HttpServletRequest request, WineService wineServ) throws Exception {
         List<Wine> wineList = wineServ.getAllWines();
          System.out.println(wineList.toString());
-        request.setAttribute("wineList", wineList);
+        request.setAttribute(WINE_LIST_KEY, wineList);
     }
     
 
