@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 // not in Jims copy but it is in his instructions regarding this topic.
 @Dependent
 public abstract interface WineListDaoStrategy {
-
+  
     public abstract boolean deleteWineById(Integer wineId) throws DatabaseAccessException;
 
     public abstract DataSource getDataSource();
@@ -33,13 +33,11 @@ public abstract interface WineListDaoStrategy {
     public abstract String getUserName();
 
     public abstract Wine getWineById(Integer wineId) throws DatabaseAccessException;
-
+  
     public abstract List<Wine> getWineList() throws DatabaseAccessException;
 
-    // this one for injection... and pooling I think
     public abstract void initDao(DataSource dataSource) throws DatabaseAccessException;
 
-    // setters are used because validation in the setters validates these params.
     public abstract void initDao(String driver, String url, String userName, String password);
 
     public abstract boolean saveWine(Integer wineId, String wineName, double price, String imageUrl) throws DatabaseAccessException;

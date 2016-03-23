@@ -9,24 +9,24 @@ package edu.wctc.apw.apwmidtermapp.exception;
  *
  * @author andre_000
  */
-public class QueryParameterMissingException extends IllegalArgumentException {
+public class ParameterMissingException extends IllegalArgumentException {
 
     // I don't remember this having to be static to do this.
-    public static String MSG = "A Query Parameter was null, empty or invalid.";
+    public static String MSG = "A parameter was null, empty or invalid.";
     
-    public QueryParameterMissingException() {
+    public ParameterMissingException() {
         super(MSG);
     }
 
-    public QueryParameterMissingException(String s) {
+    public ParameterMissingException(String s) {
         super(MSG);
     }
 
-    public QueryParameterMissingException(String message, Throwable cause) {
+    public ParameterMissingException(String message, Throwable cause) {
         super(MSG, cause);
     }
 
-    public QueryParameterMissingException(Throwable cause) {
+    public ParameterMissingException(Throwable cause) {
         super(cause);
     }
     

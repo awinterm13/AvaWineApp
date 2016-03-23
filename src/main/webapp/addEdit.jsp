@@ -58,7 +58,7 @@
                     <br>
                     <input type="submit" value="Save" name="action" align="center"/> 
             </form>
-             
+                    <h3>${errMsg}</h3>
          
         </div>
                  

@@ -11,11 +11,11 @@ package edu.wctc.apw.apwmidtermapp.exception;
  */
 public class DatabaseAccessException extends Exception {
 
-    private final String MSG = "We have a problem accessing the database";
+    private static String MSG = "We have a problem accessing the database";
     
     
     public DatabaseAccessException() {
-        super();
+        super(MSG);
     }
 
     public DatabaseAccessException(String message) {

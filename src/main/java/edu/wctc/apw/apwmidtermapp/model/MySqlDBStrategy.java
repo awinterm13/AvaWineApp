@@ -5,41 +5,24 @@
  */
 package edu.wctc.apw.apwmidtermapp.model;
  
-// This is where your custom exception import goes..
+
 import edu.wctc.apw.apwmidtermapp.exception.DatabaseAccessException;
 
 import java.io.Serializable;
 import java.sql.Connection;
-// Jim does not have this one.
-import java.sql.DatabaseMetaData;
-// these are good.
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-// I don't think we need this.... however Jim has it.
 import java.sql.SQLException;
-// these are good.
 import java.sql.Statement;
 import java.util.ArrayList;
-// Jim has it not sure if its unused.
-import java.util.Arrays;
-// jim doesn't have this
-import java.util.Date;
-// these are good.
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 // there are two that jim has I don't LEVEL AND LOGGER
-// this is good.
 import javax.enterprise.context.Dependent;
-
-// Jim does not have this, I do not use it... yet.
-import javax.enterprise.context.SessionScoped;
-
-// Good
 import javax.sql.DataSource;
 
 /**
@@ -59,17 +42,14 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
     public MySqlDBStrategy() {
     }
 
-    //this is good. just needs custom exceptions see Jim Hardcopy. I believe Jim spoon fed this.
+    
     /**
      * Open a connection using a connection pool configured on server.
      *
      * @param ds - a reference to a connection pool via a JNDI name, producing
      * this object. Typically done in a servlet using InitalContext object.
      * @throws edu.wctc.apw.apwmidtermapp.exception.DatabaseAccessException
-     *
-     *
      */
-
     @Override
     public final void openConnection(DataSource ds) throws DatabaseAccessException {
         try {
@@ -79,11 +59,15 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
         }
     }
 
-    // the old way of doing this. Jim does not have a Java doc on this one... 
-    // possibly... no need for it unless you allow for non connection pooling... 
-    // Which Why Would you... If your server doesn't support it I suppose. 
-    // Needs Custom Exception
-
+    /**
+     * Open a connection using database name URL username and password. For use when you
+     * Don't have a connection pool.
+     * @param driverClass String
+     * @param url String
+     * @param userName String
+     * @param password String
+     * @throws DatabaseAccessException 
+     */
     @Override
     public final void openConnection(String driverClass, String url,
             String userName, String password) throws DatabaseAccessException {
@@ -94,13 +78,16 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
 
         } // catch exceptions, throw custom exception.
         catch (ClassNotFoundException | SQLException e) {
-            // throw your custom exception here.
+            // the purpose of this try catch is to catch these two exceptions and 
+            // put there msgs into my custom exception.
             throw new DatabaseAccessException(e.getMessage(), e.getCause());
         }
     }
 
-    // Jim has a hahahahahaha... do I need a finally? 
-
+    /**
+     * closes connection to server.
+     * @throws DatabaseAccessException 
+     */
     @Override
     public final void closeConnection() throws DatabaseAccessException {
         try {
@@ -120,8 +107,7 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
      * zero (0) then no limit
      * @return
      * @throws java.sql.SQLException
-     */
- 
+     */ 
     @Override
     public final List<Map<String, Object>> findAllRecords(String tableName,
             int maxRecords) throws DatabaseAccessException {
@@ -135,7 +121,7 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
         } else {
             sql = "select * from " + tableName + " limit " + maxRecords;
         }
-        // sorting could happen here
+       
         Statement stmt = null;
         List<Map<String, Object>> recordList = new ArrayList<>();
 
@@ -156,7 +142,7 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
 
                     record.put(rsmd.getColumnName(colNo), rs.getObject(colNo));
                 }
-                // put our map into our list of maps.
+                
                 recordList.add(record);
             }
         } catch (SQLException e) {
@@ -169,11 +155,18 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
                 throw new DatabaseAccessException(e.getMessage(), e.getCause());
             }
         }
-        // return this list of maps
+        
         return recordList;
     }
 
-
+    /**
+     *  This method finds a record by its id number aka primary key value. 
+     * @param tableName String
+     * @param primaryKey String
+     * @param primaryKeyValue Object
+     * @return Map<String, Object>
+     * @throws DatabaseAccessException 
+     */
     @Override
     public final Map<String, Object> findById(String tableName, String primaryKey,
             Object primaryKeyValue) throws DatabaseAccessException {
@@ -211,18 +204,17 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
         return record;
     }
 
-    // here we are. we had a long delete by id method... that was awful but worked Jim gave us 
-    // a four line method that did it all faster and better. Deleted old method for midterm 
-    // going with his... probably needs some try catching.
     /**
-     * JIMS METHOD.
+     * This Method takes a a table name, the primary key or id field name, 
+     * and its value and deletes it from the database. 
+     * Must open and close a connection when using this method.
      *
-     * @param tableName
-     * @param primaryKeyFieldName
-     * @param primaryKeyValue
+     * @param tableName String
+     * @param primaryKeyFieldName String
+     * @param primaryKeyValue Object
      * @return
      * @throws edu.wctc.apw.apwmidtermapp.exception.DatabaseAccessException
-     * @throws java.sql.SQLException
+     * 
      */
 
     @Override
@@ -247,7 +239,15 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
         }
     }
 
-    // this is Jims... in my bookwebapp I do not believe I used it. I think I used my create meathod... So I'll have to review that.
+    /**
+     * This Method creates a new record in the database.
+     * Must open and close a connection when using this method.
+     * @param tableName
+     * @param colDescriptors
+     * @param colValues
+     * @return
+     * @throws DatabaseAccessException 
+     */
     @Override
     public final boolean insertRecord(String tableName, List colDescriptors, List colValues) throws DatabaseAccessException {
 
@@ -255,8 +255,12 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
         int recsUpdated = 0;
 
         // this next bit should be in the exception handler? so you can depend on the finally block firing off.
-        // the fuck does that mean exactly... like this should be... around the whole meathod when called?
+        // what does that mean exactly... like this should be... around the whole meathod when called?
         // look up exception handler java best practices. 
+        // I'm making the choice to leave this here, I like that it catches all these exceptions and passes
+        // them into my custom exception... This is a possible place where I could get dinged grading wise.
+        // But better to leave this here where it works then just start hacking at the programs core structure
+        // 10 hours before it is due. But Its possible that this try catch would be better in the DAO.
         try {
             pstmt = buildInsertStatement(conn, tableName, colDescriptors);
 
@@ -274,7 +278,7 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
             throw new DatabaseAccessException(e.getMessage(), e.getCause());
         } catch (Exception e) {
             throw new DatabaseAccessException(e.getMessage(), e.getCause());
-        } finally {  // everything in all these finally blocks is the same can I helper meathod them? 
+        } finally {  // everything in all these finally blocks is the same.. can I helper meathod them? 
             try {
                 pstmt.close();
                 conn.close();
@@ -291,59 +295,18 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
         }
     }
 
-    // this was my create method. It worked. I used it. Delete it if you don't end up using it. 
-
-    @Override
-    public int createNewRecordInTable(String tableName, ArrayList<String> record) throws SQLException {
-
-        //     String sql = "INSERT INTO table_name (column1,column2,column3,...)\n" +
-        //                  "VALUES (value1,value2,value3,...);";
-        String columnName = "";
-        String sql1 = "Select * from " + tableName;
-        String valuePlaceHolder = "";
-
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(sql1);
-
-        ResultSetMetaData rsmd = rs.getMetaData();
-
-        int columnNumber = rsmd.getColumnCount();
-
-        // test
-        // System.out.println(columnNumber);   this equals 3 so thats right.
-        for (int i = 1; i <= columnNumber; i++) {
-            if (i < columnNumber) {
-                columnName = columnName + rsmd.getColumnName(i) + ", ";
-                valuePlaceHolder = valuePlaceHolder + "?,";
-            } else if (i == columnNumber) {
-                columnName = columnName + rsmd.getColumnName(i) + ") ";
-                valuePlaceHolder = valuePlaceHolder + "?)";
-            }
-        }
-        System.out.println(columnName);
-        System.out.println(valuePlaceHolder);
-
-        String sql2 = "INSERT INTO " + tableName + " ( " + columnName
-                + "VALUES (" + valuePlaceHolder;
-
-        // test
-        //System.out.println(sql2);
-        PreparedStatement pstmt = conn.prepareStatement(sql2);
-
-        for (int i = 1; i <= columnNumber; i++) {
-            pstmt.setString(i, record.get(i - 1));
-        }
-        //    System.out.println(columnName);
-        System.out.println(pstmt);
-
-        return pstmt.executeUpdate();
-
-//test
-//        rs = stmt.executeQuery(sql1);
-//        System.out.println(rs);
-    }
 
 
+    /**
+     * This method Updates a record in the Database with new values.
+     * @param tableName String
+     * @param columnNames List
+     * @param columnValues List
+     * @param whereField String
+     * @param whereValue Object
+     * @return
+     * @throws DatabaseAccessException 
+     */
     @Override
     public final int updateRecords(String tableName, List columnNames, List columnValues,
             String whereField, Object whereValue)
@@ -396,7 +359,7 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
 	 * @return java.sql.PreparedStatement
 	 * @throws SQLException
      */
-    private PreparedStatement buildUpdateStatement(Connection conn_loc, String tableName,
+    private final PreparedStatement buildUpdateStatement(Connection conn_loc, String tableName,
             List colDescriptors, String whereField)
             throws DatabaseAccessException {
         StringBuffer sql = new StringBuffer("UPDATE ");
@@ -418,7 +381,7 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
         return pstmt;
     }
     
-    private PreparedStatement buildInsertStatement(Connection conn, String tableName, List columnDescriptors)
+    private final PreparedStatement buildInsertStatement(Connection conn, String tableName, List columnDescriptors)
             throws DatabaseAccessException{
         StringBuffer sql = new StringBuffer("INSERT INTO ");
          (sql.append(tableName)).append(" (");
@@ -441,53 +404,6 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
         return psmt;
     }
     
-    
-
-    // Not Jims way... so probably lose this. 
-//    @Override
-//    public void insertNewRecordbyId(String tableName, ArrayList<String> record, int id) throws SQLException {
-//        // is this not CreateNewRecordInTabledOneRecord method..? 
-//        String columnName = "";
-//        String sql1 = "Select * from " + tableName;
-//        String valuePlaceHolder = "";
-//
-//        Statement stmt = conn.createStatement();
-//        ResultSet rs = stmt.executeQuery(sql1);
-//
-//        ResultSetMetaData rsmd = rs.getMetaData();
-//
-//        int columnNumber = rsmd.getColumnCount();
-//
-//        // test
-//        // System.out.println(columnNumber);   this equals 3 so thats right.
-//        for (int i = 1; i <= columnNumber; i++) {
-//            if (i < columnNumber) {
-//                columnName = columnName + rsmd.getColumnName(i) + ", ";
-//
-//                valuePlaceHolder = valuePlaceHolder + "?,";
-//            } else if (i == columnNumber) {
-//                columnName = columnName + rsmd.getColumnName(i) + ") ";
-//                valuePlaceHolder = valuePlaceHolder + "?)";
-//            }
-//        }
-//        System.out.println(columnName);
-//        System.out.println(valuePlaceHolder);
-//
-//        String sql2 = "INSERT INTO " + tableName + " ( " + columnName
-//                + "VALUES (" + valuePlaceHolder + "where " + columnName + "=" + id;
-//
-//        // test
-//        //System.out.println(sql2);
-//        PreparedStatement pstmt = conn.prepareStatement(sql2);
-//
-//        for (int i = 1; i <= columnNumber; i++) {
-//            pstmt.setString(i, record.get(i - 1));
-//        }
-//        //    System.out.println(columnName);
-//        //    System.out.println(pstmt);
-//
-//        pstmt.executeUpdate();
-//    }
 
 //  Testing Main 
 //    public static void main(String[] args) throws ClassNotFoundException, SQLException, Exception {
@@ -517,14 +433,14 @@ public class MySqlDBStrategy implements Serializable, DatabaseStrategy {
 //        System.out.println(rawData);
 //
 //    }
-      // test comment out for production
-    public static void main(String[] args) throws DatabaseAccessException {
-        System.out.println("Running");
-        MySqlDBStrategy db = new MySqlDBStrategy();
-        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/ava_wine", "root", "admin");
-        System.out.println(db.findAllRecords("wine", 0).toString());
-        db.closeConnection();
-    }
+//      // test comment out for production
+//    public static void main(String[] args) throws DatabaseAccessException {
+//        System.out.println("Running");
+//        MySqlDBStrategy db = new MySqlDBStrategy();
+//        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/ava_wine", "root", "admin");
+//        System.out.println(db.findAllRecords("wine", 0).toString());
+//        db.closeConnection();
+//    }
     
     
 }

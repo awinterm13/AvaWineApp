@@ -77,7 +77,7 @@
                         </tbody>
 
                     </table>
-                    <h1>${errorMsg}</h1>
+                    <h1>${errMsg}</h1>
                 </div>
             </div>
         </div>

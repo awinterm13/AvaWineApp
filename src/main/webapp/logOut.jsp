@@ -19,7 +19,7 @@
          <jsp:include page="navBar.jsp" />
          <div style="margin-top: 200px;">
          <!-- font color is a ServletContext object and name is a Session Object. -->
-        <h1 align="center" style="color: ${fontColor};" >Goodbye ${name}</h1>
+        <h1 align="center" style="color: ${fontColor};" >Goodbye ${username}</h1>
          </div>
         <jsp:include page="footer.jsp" />
     </body>

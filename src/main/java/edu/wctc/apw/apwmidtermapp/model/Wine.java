@@ -8,7 +8,7 @@ package edu.wctc.apw.apwmidtermapp.model;
 import java.util.Objects;
 
 /**
- *
+ * This class represents a Wine. 
  * @author andre_000
  */
 public class Wine {
@@ -16,49 +16,102 @@ public class Wine {
     private String productName;
     private double productPrice;
     private String imageURL;
-
+    
+    /**
+     * default constructor
+     */
     public Wine() {
     }
-
+    /**
+     * constructor that takes all parameters, used for testing.
+     * @param productId Integer
+     * @param productName String
+     * @param productPrice Double
+     * @param imageURL  String
+     */
     public Wine(int productId, String productName, double productPrice, String imageURL) {
+        if( productId < 0 || productName == null || productName.isEmpty() ||
+                 productPrice < 0 || imageURL == null || imageURL.isEmpty()){
+            throw new IllegalArgumentException();
+        }
         this.productId = productId;
         this.productName = productName;
         this.productPrice = productPrice;
         this.imageURL = imageURL;
     }
-
+    /**
+     * getter for ProductId
+     * @return Integer
+     */
     public final int getProductId() {
         return productId;
     }
-
+    /**
+     * Setter for productId must be more then 0
+     * @param productId 
+     */
     public final void setProductId(int productId) {
+        if(productId < 0){
+            throw new IllegalArgumentException();
+        }
         this.productId = productId;
     }
-
+    
+    /**
+     * Getter for ProductName
+     * @return String
+     */
     public final String getProductName() {
         return productName;
     }
-
+    /**
+     * setter for productName Name may not be empty or null
+     * @param productName 
+     */
     public final void setProductName(String productName) {
+        if(productName.isEmpty() || productName == null){
+            throw new IllegalArgumentException();
+        }
         this.productName = productName;
     }
-
+    /**
+     * getter for productPrice
+     * @return double
+     */
     public final double getProductPrice() {
         return productPrice;
     }
-
+    /**
+     * setter for productPrice must be more then 0
+     * @param productPrice 
+     */
     public final void setProductPrice(double productPrice) {
+        if(productPrice < 0){
+             throw new IllegalArgumentException();
+        }
         this.productPrice = productPrice;
     }
-
+    /**
+     * Getter for imageURL
+     * @return String
+     */
     public final String getImageURL() {
         return imageURL;
     }
-
+    /**
+     * Setter for imageURL must not be null or empty
+     * @param imageURL 
+     */
     public final void setImageURL(String imageURL) {
+        if(imageURL.isEmpty() || imageURL == null){
+            throw new IllegalArgumentException();
+        }
         this.imageURL = imageURL;
     }
-
+    /**
+     * hashcode
+     * @return 
+     */
     @Override
     public final int hashCode() {
         int hash = 7;
@@ -68,7 +121,11 @@ public class Wine {
         hash = 41 * hash + Objects.hashCode(this.imageURL);
         return hash;
     }
-
+    /**
+     * overriden equals.
+     * @param obj
+     * @return 
+     */
     @Override
     public final boolean equals(Object obj) {
         if (this == obj) {
@@ -95,7 +152,10 @@ public class Wine {
         }
         return true;
     }
-
+    /**
+     * overriden toString
+     * @return returns string
+     */
     @Override
     public final  String toString() {
         return "Wine{" + "productId=" + productId + ", productName=" + productName + ", productPrice=" + productPrice + ", imageURL=" + imageURL + '}';
