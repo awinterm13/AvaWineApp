@@ -17,11 +17,13 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 /**
@@ -68,6 +70,8 @@ public class WineListController extends HttpServlet {
         
         String destination = WINE_LIST_PAGE;
         String action = request.getParameter(ACTION_PARAMETER);
+        HttpSession session = request.getSession();
+        ServletContext ctx = request.getServletContext();
         
         try  {
              
@@ -78,6 +82,13 @@ public class WineListController extends HttpServlet {
         switch (action) {
                 case GET_WINE_LIST_ACTION:
                         // Jim made a method out of this. If I reuse these two lines I will do the same.
+                        if(request.getParameter("username") != null || request.getParameter("username").length() > 0){
+                            session.setAttribute("name", request.getParameter("username"));
+                        }
+                         if(request.getParameter("fontColor") != null || request.getParameter("fontColor").length() > 0){
+                             ctx.setAttribute("fontColor", request.getParameter("fontColor") );
+                         }
+                         
                         this.refreshList(request, wineServ);
                         // if you have two or more pages this tool can send to then this next line is smart.
                         destination = WINE_LIST_PAGE;
@@ -114,6 +125,10 @@ public class WineListController extends HttpServlet {
                     wineServ.saveOrUpdateWine(Id, wineName, Double.parseDouble(price), imageUrl);
                     this.refreshList(request, wineServ);
                     destination = WINE_LIST_PAGE;
+                    break;
+                    
+                case "logOut":
+                    destination = "/logOut.jsp";
                     break;
             
         }

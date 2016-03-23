@@ -58,13 +58,15 @@ public class WineService implements Serializable {
     public  void saveOrUpdateWine(String wineId, String wineName, double price, String imageUrl ) throws DatabaseAccessException {
          
 //         this first one might present a problem with nulls.  TEST IT.
-        if(Integer.parseInt(wineId) < 0){
-            throw new QueryParameterMissingException();  
-        }  if(wineName.isEmpty() || wineName == null ) {
+      if(wineName.isEmpty() || wineName == null ) {
+            System.out.println("NAME IS PROBLEM");
             throw new QueryParameterMissingException();
         } if(price < 0 || price > 500){
+            System.out.println("price IS PROBLEM");
+           
             throw new QueryParameterMissingException();
         } if(imageUrl.isEmpty() || imageUrl == null ) {
+            System.out.println("url IS PROBLEM");
             throw new QueryParameterMissingException();
         }
          

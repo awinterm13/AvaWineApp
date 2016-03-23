@@ -5,10 +5,10 @@
  */
 
 function validateForm() {
-    var x = document.forms["login"]["password"].value;
+    var x = document.forms["login"]["fontColor"].value;
     var y = document.forms["login"]["username"].value;
     if (x == null || x == "") {
-        alert("Password must be filled out");
+        alert("Color must be filled out");
         return false;
     }
        if (y == null || y == "") {
@@ -22,15 +22,15 @@ function validateFormAddEdit() {
     var y = document.forms["addEdit"]["price"].value;
     var z = document.forms["addEdit"]["imageUrl"].value;
     if (x == null || x == "") {
-        alert("Password must be filled out");
+        alert("Product Name must be filled out");
         return false;
     }
        if (y == null || y == "") {
-        alert("Username must be filled out");
+        alert("Price must be filled out");
         return false;
     }
       if (z == null || z == "") {
-        alert("Username must be filled out");
+        alert("Image URL must be filled out");
         return false;
     }
 }

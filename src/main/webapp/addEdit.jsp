@@ -4,6 +4,7 @@
     Author     : andre_000
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,45 +18,58 @@
     </head>
     <body>
          <jsp:include page="navBar.jsp" />
-        <h1>Hello sluts welcome to the ADD EDIT PAGE.</h1>
-        
+      
+         <div class="col-md-10" align="right">
+               <form method="POST" action="<%= response.encodeURL("WineListController")%>"  name="addEdit">
+                    <input action="<%= response.encodeURL("WineListController")%>" type="submit" value="Cancel" name="action" />
+              </form>
+         </div>
+        <div class="col-md-6" align="center">
+             
         <form method="POST" action="<%= response.encodeURL("WineListController")%>" onsubmit="return validateFormAddEdit()" name="addEdit">
-            <table width="500" border="1" cellspacing="0" cellpadding="4">
+            
+            <table width="auto" border="1" cellspacing="0" cellpadding="4" >
                
               
-                        <tr> 
-                            <td align="left"><input type="text" value="${wine.productId}" name="wineID" hidden /></td>
-                        </tr>         
+                <tr> 
+                    <td align="left"><input type="text" value="${wine.productId}" name="wineID" hidden /></td>
+                </tr>         
             
                 
                 <tr>
-                    <td style="background-color: black;color:white;" align="left">Product Name</td>
+                    <td style="background-color: lightgray; color:black;" align="left">Product Name</td>
                     <td align="left"><input type="text" value="${wine.productName}" name="productName" required/></td>
                 </tr>
                 
                
                 <tr>
-                    <td style="background-color: black;color:white;" align="left">Price</td>
+                    <td style="background-color: lightgray; color:black;" align="left">Price</td>
                     <td align="left"><input type="text" value="${wine.productPrice}" name="price" required /></td>
                    
                 </tr>
                 
-               
-                
-                <tr>
-                    <input type="submit" value="Cancel" name="action" />&nbsp;
-                    <input type="submit" value="Save" name="action" />
-                    
-                </tr>
-                
                  <tr>
-                    <td style="background-color: black;color:white;" align="left">Image URL</td>
+                    <td style="background-color: lightgray;color:black;" align="left">Image URL</td>
                     <td align="left"><input type="text" value="${wine.imageURL}" name="imageUrl" required /></td>
                    
                 </tr>
                 
             </table>
-        </form>
+                    <br>
+                    <input type="submit" value="Save" name="action" align="center"/> 
+            </form>
+             
+         
+        </div>
+                 
+                    <div class="col-md-4">
+                        
+                        <img src="${wine.imageURL}"  height="350
+                             " width="auto" align="left" >
+                        
+                    </div>            
+                    
+                    
                     <jsp:include page="footer.jsp" />
                     <script src="formValidation.js" type="text/javascript"></script>
     </body>

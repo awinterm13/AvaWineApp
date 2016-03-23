@@ -15,15 +15,24 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Ava Wine List</title>
         <%-- Custom CSS goes here --%>
+        
+        <link href="site.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet"
+              
               href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     </head>
     <body>
         <jsp:include page="navBar.jsp" />
-            <div class="container" id="pageWrapper">
-            <div class="row">
+         <div class="col-md-11" align="right">
+        <form method="POST" action=<%= response.encodeURL("WineListController") %>>
+        <input class="btn"  type="submit" name="action" value="logOut" align="right"  />
+        </form>
+         </div>
+        <br>
+            <div class="container" id="pageWrapper" >
+            <div class="row" >
                 <h1>Ava Wine List</h1>
                 <div class="col-md-8 ScrollStyle">
                     <form method="POST" action=<%= response.encodeURL("WineListController") %>>
@@ -31,7 +40,7 @@
                         <input class="btn"  type="submit" name="submit" value="Add"  />
                     </form>
 
-                    <table class="table table-hover active">
+                    <table class="table table-hover active" align="center">
                         <thead>
                             <tr>
                                 <th>ID</th>
