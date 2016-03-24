@@ -9,13 +9,14 @@ import edu.wctc.apw.apwmidtermapp.exception.DaoIsNullException;
 import edu.wctc.apw.apwmidtermapp.exception.DatabaseAccessException;
 import edu.wctc.apw.apwmidtermapp.exception.ParameterMissingException;
 import java.io.Serializable;
-import java.text.ParseException;
+
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 
 /**
  * This is a Service class used to manage the Dao interface object.
+ * Scope causes methods to not be final.
  * @author andre_000
  */
 @SessionScoped
