@@ -5,163 +5,112 @@
  */
 package edu.wctc.apw.apwmidtermapp.model;
 
-import java.util.Objects;
+import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * This class represents a Wine. 
+ *
  * @author andre_000
  */
-public class Wine {
-    private int productId;
-    private String productName;
-    private double productPrice;
-    private String imageURL;
-    
-    /**
-     * default constructor
-     */
+@Entity
+@Table(name = "wine")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Wine.findAll", query = "SELECT w FROM Wine w"),
+    @NamedQuery(name = "Wine.findByWineId", query = "SELECT w FROM Wine w WHERE w.wineId = :wineId"),
+    @NamedQuery(name = "Wine.findByWineName", query = "SELECT w FROM Wine w WHERE w.wineName = :wineName"),
+    @NamedQuery(name = "Wine.findByWinePrice", query = "SELECT w FROM Wine w WHERE w.winePrice = :winePrice"),
+    @NamedQuery(name = "Wine.findByImageUrl", query = "SELECT w FROM Wine w WHERE w.imageUrl = :imageUrl")})
+public class Wine implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "wine_id")
+    private Integer wineId;
+    @Size(max = 255)
+    @Column(name = "wine_name")
+    private String wineName;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "wine_price")
+    private Double winePrice;
+    @Size(max = 255)
+    @Column(name = "image_url")
+    private String imageUrl;
+
     public Wine() {
     }
-    /**
-     * constructor that takes all parameters, used for testing.
-     * @param productId Integer
-     * @param productName String
-     * @param productPrice Double
-     * @param imageURL  String
-     */
-    public Wine(int productId, String productName, double productPrice, String imageURL) {
-        if( productId < 0 || productName == null || productName.isEmpty() ||
-                 productPrice < 0 || imageURL == null || imageURL.isEmpty()){
-            throw new IllegalArgumentException();
-        }
-        this.productId = productId;
-        this.productName = productName;
-        this.productPrice = productPrice;
-        this.imageURL = imageURL;
+
+    public Wine(Integer wineId) {
+        this.wineId = wineId;
     }
-    /**
-     * getter for ProductId
-     * @return Integer
-     */
-    public final int getProductId() {
-        return productId;
+
+    public Integer getWineId() {
+        return wineId;
     }
-    /**
-     * Setter for productId must be more then 0
-     * @param productId 
-     */
-    public final void setProductId(int productId) {
-        if(productId < 0){
-            throw new IllegalArgumentException();
-        }
-        this.productId = productId;
+
+    public void setWineId(Integer wineId) {
+        this.wineId = wineId;
     }
-    
-    /**
-     * Getter for ProductName
-     * @return String
-     */
-    public final String getProductName() {
-        return productName;
+
+    public String getWineName() {
+        return wineName;
     }
-    /**
-     * setter for productName Name may not be empty or null
-     * @param productName 
-     */
-    public final void setProductName(String productName) {
-        if(productName.isEmpty() || productName == null){
-            throw new IllegalArgumentException();
-        }
-        this.productName = productName;
+
+    public void setWineName(String wineName) {
+        this.wineName = wineName;
     }
-    /**
-     * getter for productPrice
-     * @return double
-     */
-    public final double getProductPrice() {
-        return productPrice;
+
+    public Double getWinePrice() {
+        return winePrice;
     }
-    /**
-     * setter for productPrice must be more then 0
-     * @param productPrice 
-     */
-    public final void setProductPrice(double productPrice) {
-        if(productPrice < 0){
-             throw new IllegalArgumentException();
-        }
-        this.productPrice = productPrice;
+
+    public void setWinePrice(Double winePrice) {
+        this.winePrice = winePrice;
     }
-    /**
-     * Getter for imageURL
-     * @return String
-     */
-    public final String getImageURL() {
-        return imageURL;
+
+    public String getImageUrl() {
+        return imageUrl;
     }
-    /**
-     * Setter for imageURL must not be null or empty
-     * @param imageURL 
-     */
-    public final void setImageURL(String imageURL) {
-        if(imageURL.isEmpty() || imageURL == null){
-            throw new IllegalArgumentException();
-        }
-        this.imageURL = imageURL;
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
-    /**
-     * hashcode
-     * @return 
-     */
+
     @Override
-    public final int hashCode() {
-        int hash = 7;
-        hash = 41 * hash + this.productId;
-        hash = 41 * hash + Objects.hashCode(this.productName);
-        hash = 41 * hash + (int) (Double.doubleToLongBits(this.productPrice) ^ (Double.doubleToLongBits(this.productPrice) >>> 32));
-        hash = 41 * hash + Objects.hashCode(this.imageURL);
+    public int hashCode() {
+        int hash = 0;
+        hash += (wineId != null ? wineId.hashCode() : 0);
         return hash;
     }
-    /**
-     * overriden equals.
-     * @param obj
-     * @return 
-     */
+
     @Override
-    public final boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Wine)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Wine other = (Wine) obj;
-        if (this.productId != other.productId) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.productPrice) != Double.doubleToLongBits(other.productPrice)) {
-            return false;
-        }
-        if (!Objects.equals(this.productName, other.productName)) {
-            return false;
-        }
-        if (!Objects.equals(this.imageURL, other.imageURL)) {
+        Wine other = (Wine) object;
+        if ((this.wineId == null && other.wineId != null) || (this.wineId != null && !this.wineId.equals(other.wineId))) {
             return false;
         }
         return true;
     }
-    /**
-     * overriden toString
-     * @return returns string
-     */
+
     @Override
-    public final  String toString() {
-        return "Wine{" + "productId=" + productId + ", productName=" + productName + ", productPrice=" + productPrice + ", imageURL=" + imageURL + '}';
+    public String toString() {
+        return "edu.wctc.apw.apwmidtermapp.model.Wine[ wineId=" + wineId + " ]";
     }
-    
-    
-    
     
 }

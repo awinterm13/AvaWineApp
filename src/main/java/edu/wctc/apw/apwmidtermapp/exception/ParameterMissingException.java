@@ -6,7 +6,7 @@
 package edu.wctc.apw.apwmidtermapp.exception;
 
 /**
- *
+ * Custom Exception, thrown if a parameter breaks validation rules.
  * @author andre_000
  */
 public class ParameterMissingException extends IllegalArgumentException {

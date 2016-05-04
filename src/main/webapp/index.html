@@ -3,11 +3,12 @@
     <head>
         <title>Ava Wine</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="site.css" rel="stylesheet" type="text/css"/>
          <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     </head>
-    <body style="overflow: auto; margin-bottom: 75px; background-image: url(images/wineroom.jpg);">
-       <nav class="navbar navbar-default navbar-static-top" style="background-color: black;">
+    <body style="background-image: url(images/wineroom.jpg);">
+       <nav id="nav" class="navbar navbar-default navbar-static-top" >
         <div class="container">
             <div class="navbar-header">
                 <p style="float: left;"><img class="img-responsive" style="max-width:75px; margin-top: 7px; margin-right: 10px;"
@@ -34,9 +35,11 @@
         
              
         <form method="POST" name="login" action="WineListController"  onsubmit="return validateForm()" style="text-align: center; padding-top: 25px;">
+            <label>Name</label>
             <input type="text" name="username" value="" required />
             <br>
             <br>
+            <label>Color</label>
             <input type="text" name="fontColor" value="" required/>
             <br>
             <br>
@@ -49,7 +52,7 @@
              
         </div>
         
-          <nav  class="footer footer-inverse navbar-fixed-bottom" style="background-color: black; color: ghostwhite; ">
+          <nav  id="foot" class="footer footer-inverse navbar-fixed-bottom" >
   <div class="container">
                 <p class="navbar-text"><i>&copy; 2016 Andrew Wintermyer</i></p>  
             </div>

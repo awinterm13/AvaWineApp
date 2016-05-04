@@ -6,7 +6,7 @@
 package edu.wctc.apw.apwmidtermapp.exception;
 
 /**
- *
+ * Custom Exception class, used to combine all low level DBStrategy Exceptions into one class.
  * @author andre_000
  */
 public class DatabaseAccessException extends Exception {

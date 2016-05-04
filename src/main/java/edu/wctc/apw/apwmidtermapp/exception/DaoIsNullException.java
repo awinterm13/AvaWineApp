@@ -6,7 +6,7 @@
 package edu.wctc.apw.apwmidtermapp.exception;
 
 /**
- *
+ * A Custom Exception thrown if the Dao Object is Null.
  * @author andre_000
  */
 public class DaoIsNullException extends NullPointerException {

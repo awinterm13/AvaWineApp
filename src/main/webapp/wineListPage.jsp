@@ -13,7 +13,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Ava Wine List</title>
+        <title>Ava Wine</title>
         <%-- Custom CSS goes here --%>
         
         <link href="site.css" rel="stylesheet" type="text/css"/>
@@ -82,5 +82,6 @@
             </div>
         </div>
                  <jsp:include page="footer.jsp" />
+                 <script src="formValidation.js" type="text/javascript"></script>
     </body>
 </html>
