@@ -8,8 +8,8 @@ package edu.wctc.apw.apwmidtermapp.controller;
 import edu.wctc.apw.apwmidtermapp.exception.DaoIsNullException;
 import edu.wctc.apw.apwmidtermapp.exception.DatabaseAccessException;
 import edu.wctc.apw.apwmidtermapp.exception.ParameterMissingException;
-import edu.wctc.apw.apwmidtermapp.exception.ejb.AbstractFacade;
 import edu.wctc.apw.apwmidtermapp.model.Wine;
+import edu.wctc.apw.apwmidtermapp.service.WineService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * A Controller Class for the Ava Wine List Management. Basic Crud Operations.
@@ -75,7 +77,7 @@ public class WineListController extends HttpServlet {
     private String dbJndiName;
 
     @Inject
-    private AbstractFacade<Wine> wineServ;
+        private WineService wineServ;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -117,13 +119,14 @@ public class WineListController extends HttpServlet {
                     String wineId = request.getParameter(WINE_ID_PARAMETER_KEY);
 
                     if (subAction.equals(DELETE_ACTION)) {
-                        wine = wineServ.find(wineId);
+                        
+                        wine = wineServ.findById(wineId);
                         wineServ.remove(wine);
                         this.refreshList(request, wineServ);
                         destination = WINE_LIST_PAGE;
                     } else if (subAction.equals(EDIT_ACTION)) {
                         destination = ADD_EDIT_PAGE;
-                        wine = wineServ.find(wineId);
+                        wine = wineServ.findById(wineId);
                         request.setAttribute(WINE_KEY, wine);
                     } else if (subAction.equals(ADD_ACTION)) {
                         request.setAttribute(WINE_KEY, null);
@@ -143,7 +146,7 @@ public class WineListController extends HttpServlet {
                         String imageUrl = request.getParameter(IMAGE_URL_KEY);
                         String Id = request.getParameter(WINE_ID_PARAMETER_KEY);
 //                    System.out.println("THIS HAPPENED. " + wineName + price + imageUrl + Id);
-                        wine = wineServ.find(Id);
+                        wine = wineServ.findById(Id);
                         wineServ.edit(wine);
                        
                         this.refreshList(request, wineServ);
@@ -232,16 +235,17 @@ public class WineListController extends HttpServlet {
      *
      * @throws ServletException
      */
-    @Override
-    public final void init() throws ServletException {
-        driverClass = getServletContext().getInitParameter(DRIVER_CLASS_KEY);
-        url = getServletContext().getInitParameter(DATABASE_URL_KEY);
-        userName = getServletContext().getInitParameter(DATABASE_USERNAME_KEY);
-        password = getServletContext().getInitParameter(DATABASE_PASSWORD_KEY);
-        dbJndiName = getServletContext().getInitParameter(DATABASE_JNDI_NAME_KEY);
+  @Override
+    public void init() throws ServletException {
+        // Ask Spring for object to inject
+        ServletContext sctx = getServletContext();
+        WebApplicationContext ctx
+                = WebApplicationContextUtils.getWebApplicationContext(sctx);
+        wineServ = (WineService) ctx.getBean("wineService");
+
     }
 
-    private void refreshList(HttpServletRequest request, AbstractFacade<Wine> wineServ) throws Exception {
+    private void refreshList(HttpServletRequest request, WineService wineServ) throws Exception {
         List<Wine> wineList = wineServ.findAll();
 //        System.out.println(wineList.toString());
         request.setAttribute(WINE_LIST_KEY, wineList);
