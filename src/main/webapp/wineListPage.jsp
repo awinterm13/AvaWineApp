@@ -53,20 +53,20 @@
                         <tbody>
 
                             <c:forEach var="wine" items="${wineList}">
-                                <tr class="${wine.productName}" name="${wine.productName}" id=${wine.productId} >
+                                <tr class="${wine.wineName}" name="${wine.wineName}" id=${wine.wineId} >
                                     <td>
-                                        <c:out value="${wine.productId}" />
+                                        <c:out value="${wine.wineId}" />
                                     </td>
                                     <td>
-                                        <c:out value="${wine.productName}"/>
+                                        <c:out value="${wine.wineName}"/>
                                     </td>
                                     <td>            
-                                        <c:out value="${wine.productPrice}"/>
+                                        <c:out value="${wine.winePrice}"/>
                                     </td>
                                     <td>
                                         <form method="POST" action="WineListController">
                                             <input type="hidden" name="action" value="addEditDelete" />
-                                            <input type="hidden" name="wineID" value="${wine.productId}" />
+                                            <input type="hidden" name="wineID" value="${wine.wineId}" />
                                             
                                             <input class="btn"  type="submit" name="submit" value="Edit"  />
                                             <input class="btn"  type="submit" name="submit" value="Delete"  />

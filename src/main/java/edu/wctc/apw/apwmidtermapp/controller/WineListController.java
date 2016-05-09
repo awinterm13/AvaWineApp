@@ -8,7 +8,7 @@ package edu.wctc.apw.apwmidtermapp.controller;
 import edu.wctc.apw.apwmidtermapp.exception.DaoIsNullException;
 import edu.wctc.apw.apwmidtermapp.exception.DatabaseAccessException;
 import edu.wctc.apw.apwmidtermapp.exception.ParameterMissingException;
-import edu.wctc.apw.apwmidtermapp.model.Wine;
+import edu.wctc.apw.apwmidtermapp.entity.Wine;
 import edu.wctc.apw.apwmidtermapp.service.WineService;
 
 import java.io.IOException;
@@ -76,8 +76,8 @@ public class WineListController extends HttpServlet {
     private String password;
     private String dbJndiName;
 
-    @Inject
-        private WineService wineServ;
+    
+    private WineService wineServ;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -145,8 +145,27 @@ public class WineListController extends HttpServlet {
                         String price = request.getParameter(PRICE_KEY);
                         String imageUrl = request.getParameter(IMAGE_URL_KEY);
                         String Id = request.getParameter(WINE_ID_PARAMETER_KEY);
-//                    System.out.println("THIS HAPPENED. " + wineName + price + imageUrl + Id);
+                    System.out.println("THIS HAPPENED. " + wineName + price + imageUrl + Id);
+                     
+                    
+                    if(Id.isEmpty()){
+                        wine = new Wine();
+                        wine.setWineName(wineName);
+                        wine.setWinePrice(Double.valueOf(price));
+                        wine.setImageUrl(imageUrl);
+                        // if vineyard... then do that here like author.
+//                        Author author = null;
+                        // dont think this next line is needed.
+//                        this.refreshList(request, wineServ);
+                     } else {
                         wine = wineServ.findById(Id);
+                        wine.setWineName(wineName);
+                        System.out.println(wine.getWineName());
+                        wine.setImageUrl(imageUrl);
+                        wine.setWinePrice(Double.valueOf(price));
+                        System.out.println(wine.toString());
+                        }
+                      
                         wineServ.edit(wine);
                        
                         this.refreshList(request, wineServ);

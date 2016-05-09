@@ -33,25 +33,25 @@
 
 
                     <tr> 
-                        <td align="left"><input type="text" value="${wine.productId}" name="wineID" hidden /></td>
+                        <td align="left"><input type="text" value="${wine.wineId}" name="wineID" hidden /></td>
                     </tr>         
 
 
                     <tr>
                         <td style="background-color: lightgray; color:black;" align="left">Product Name</td>
-                        <td align="left"><input type="text" value="${wine.productName}" name="productName" required/></td>
+                        <td align="left"><input type="text" value="${wine.wineName}" name="productName" required/></td>
                     </tr>
 
 
                     <tr>
                         <td style="background-color: lightgray; color:black;" align="left">Price</td>
-                        <td align="left"><input type="text" value="${wine.productPrice}" name="price" required /></td>
+                        <td align="left"><input type="text" value="${wine.winePrice}" name="price" required /></td>
 
                     </tr>
 
                     <tr>
                         <td style="background-color: lightgray;color:black;" align="left">Image URL</td>
-                        <td align="left"><input type="text" value="${wine.imageURL}" name="imageUrl" required /></td>
+                        <td align="left"><input type="text" value="${wine.imageUrl}" name="imageUrl" required /></td>
 
                     </tr>
 
@@ -65,7 +65,7 @@
 
         <div class="col-md-4">
 
-            <img src="${wine.imageURL}"  height="350
+            <img src="${wine.imageUrl}"  height="350
                  " width="auto" align="left" >
 
         </div>            
