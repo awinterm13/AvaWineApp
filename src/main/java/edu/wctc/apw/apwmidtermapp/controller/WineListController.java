@@ -103,12 +103,12 @@ public class WineListController extends HttpServlet {
             switch (action) {
                 case GET_WINE_LIST_ACTION:
                     // Jim made a method out of this. If I reuse these two lines I will do the same.
-                    if (request.getParameter(USER_NAME_KEY) != null || request.getParameter(USER_NAME_KEY).length() > 0) {
-                        session.setAttribute(USER_NAME_KEY, request.getParameter(USER_NAME_KEY));
-                    }
-                    if (request.getParameter(FONT_COLOR_KEY) != null || request.getParameter(FONT_COLOR_KEY).length() > 0) {
-                        ctx.setAttribute(FONT_COLOR_KEY, request.getParameter(FONT_COLOR_KEY));
-                    }
+//                    if (request.getParameter(USER_NAME_KEY) != null || request.getParameter(USER_NAME_KEY).length() > 0) {
+//                        session.setAttribute(USER_NAME_KEY, request.getParameter(USER_NAME_KEY));
+//                    }
+//                    if (request.getParameter(FONT_COLOR_KEY) != null || request.getParameter(FONT_COLOR_KEY).length() > 0) {
+//                        ctx.setAttribute(FONT_COLOR_KEY, request.getParameter(FONT_COLOR_KEY));
+//                    }
 
                     this.refreshList(request, wineServ);
                     // if you have two or more pages this tool can send to then this next line is smart.
