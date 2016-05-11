@@ -51,7 +51,7 @@
                         <tbody>
 
                             <c:forEach var="wine" items="${wineList}">
-                                <tr class="${wine.wineName}" name="${wine.wineName}" id=${wine.wineId} >
+                                <tr class="${wine.imageUrl}" name="${wine.wineName}" id=${wine.wineId} >
                                     <td>
                                         <c:out value="${wine.wineId}" />
                                     </td>
@@ -60,11 +60,13 @@
                                     </td>
                                     <td>            
                                         <c:out value="${wine.winePrice}"/>
+                                        
                                     </td>
                                     <td>
                                         <form method="POST" action="WineListController">
                                             <input type="hidden" name="action" value="addEditDelete" />
                                             <input type="hidden" name="wineID" value="${wine.wineId}" />
+                                            
                                             <sec:authorize access="hasAnyRole('ROLE_MGR')">
                                             <input class="btn"  type="submit" name="submit" value="Edit"  />
                                             <input class="btn"  type="submit" name="submit" value="Delete"  />
@@ -78,9 +80,15 @@
                     </table>
                     <h1>${errMsg}</h1>
                 </div>
+                <dive>
+                    
+                    <img id="picture" src=""  height="350
+                 " width="auto" align="left" >
+                </dive>
             </div>
         </div>
                  <jsp:include page="footer.jsp" />
                  <script src="formValidation.js" type="text/javascript"></script>
+                 <script src="imgDisplayforWineList.js" type="text/javascript"></script>
     </body>
 </html>

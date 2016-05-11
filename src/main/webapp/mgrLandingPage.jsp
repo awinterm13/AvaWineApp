@@ -25,11 +25,12 @@
     <body>
         <jsp:include page="navBar.jsp" />
          <sec:authorize access="hasAnyRole('ROLE_MGR')">
-         
+          <div align="center">
         <h1>Admin Page</h1>
          <form method="POST" action=<%= response.encodeURL("WineListController?action=getWineList") %>>
         <input class="btn"  type="submit" name="action" value="Manage Wines" align="right"  />
         </form>
+          </div>
          </sec:authorize>
         <jsp:include page="footer.jsp" />
     </body>
