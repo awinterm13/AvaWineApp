@@ -26,3 +26,11 @@
         </div>
     </div>
 </nav>
+  <div class="col-md-11" align="right">
+        
+        <a href='<%= this.getServletContext().getContextPath() + "/j_spring_security_logout"%>'>Log Out</a>
+         
+        
+         </div>
+        <br>
+        <br>

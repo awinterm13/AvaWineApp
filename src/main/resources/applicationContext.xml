@@ -60,7 +60,8 @@
         <sec:intercept-url pattern="/loginError.jsp" 
                            access="isAnonymous()" requires-channel="https"/>
         
-       
+        <sec:intercept-url pattern="/logOut.jsp" 
+                           access="permitAll()" requires-channel="https"/>
 
 
         <sec:intercept-url 
@@ -81,7 +82,7 @@
         <sec:logout logout-url="/j_spring_security_logout" 
                     invalidate-session="true" 
                     delete-cookies="JSESSIONID"
-                    logout-success-url="/index.jsp" />
+                    logout-success-url="/logOut.jsp" />
         
         <sec:csrf disabled="true"/>
         <!-- end Spring Security Config -->

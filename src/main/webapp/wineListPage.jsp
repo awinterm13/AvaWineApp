@@ -26,11 +26,7 @@
     </head>
     <body>
         <jsp:include page="navBar.jsp" />
-         <div class="col-md-11" align="right">
-        <form method="POST" action=<%= response.encodeURL("WineListController") %>>
-        <input class="btn"  type="submit" name="action" value="logOut" align="right"  />
-        </form>
-         </div>
+     
         <br>
             <div class="container" id="pageWrapper" >
             <div class="row" >
