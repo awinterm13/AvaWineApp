@@ -55,7 +55,7 @@
         <sec:access-denied-handler error-page="/loginError.jsp" />
 
         <sec:intercept-url pattern="/index.jsp" 
-                           access="isAnonymous()" requires-channel="https"/>
+                           access="permitAll()" requires-channel="https"/>
         
         <sec:intercept-url pattern="/loginError.jsp" 
                            access="isAnonymous()" requires-channel="https"/>

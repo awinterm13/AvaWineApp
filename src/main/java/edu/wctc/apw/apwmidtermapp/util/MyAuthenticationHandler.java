@@ -16,13 +16,13 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 /** * * @author jlombardo */
 
 public class MyAuthenticationHandler extends SimpleUrlAuthenticationSuccessHandler {
-    
+     
         @Override        
         public void onAuthenticationSuccess(HttpServletRequest request,
                 HttpServletResponse response, Authentication authentication)
                 throws ServletException, IOException {                                
-            final String USER_URL = request.getServletContext().getContextPath() + "/WineListController/getWineList";
-            final String ADMIN_URL = request.getServletContext().getContextPath() + "/WineListController/getWineList";        
+            final String USER_URL =  "/userLandingPage.jsp";
+            final String ADMIN_URL = "/mgrLandingPage.jsp";        
             Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities()); 
             if (roles.contains("ROLE_MGR")) {            
                 getRedirectStrategy().sendRedirect(request, response,ADMIN_URL);

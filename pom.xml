@@ -119,11 +119,7 @@
             <artifactId>querydsl-apt</artifactId>
             <version>3.6.9</version>
         </dependency>
-        <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <version>3.6.9</version>
-        </dependency>
+        
         <!--
             Core Spring utilities used by other modules.
             Define this if you use Spring Utility APIs (org.springframework.core.*/org.springframework.util.*)

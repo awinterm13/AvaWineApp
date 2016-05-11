@@ -34,31 +34,20 @@
             </div>
             <div class="collapse navbar-collapse" id="collapse-menu"  >
                 <ul class="nav navbar-nav navbar-right" >
-                    <li class="active"><a href="index.html" style="background-color: black; color: ghostwhite;">Home</a></li>
+                    <li class="active"><a href="index.jsp" style="background-color: black; color: ghostwhite;">Home</a></li>
                 </ul>
            </div>
         </div>
     </nav>
         <div id="msg">
-        <h1 color="white" >You have been logged Out. Please log back in. If you are having issues please contact your Web Admin.</h1>
+        <h1 color="white" >Your login failed or timed out. Please log back in. If you are having issues please contact your Web Admin.</h1>
         </div>
         <div class="col-md-3" style="background-color: white; float: none; margin: 0 auto; padding-bottom: 25px;"> 
              <img class="img-responsive" style="margin: 0 auto; padding-top: 50px; max-height: 500px;" 
                                             src="images/redLogo.jpg">
         
              
-        <form method="POST" name="login" action="WineListController"  onsubmit="return validateForm()" style="text-align: center; padding-top: 25px;">
-            <label>Name</label>
-            <input type="text" name="username" id="j_username" value="" required />
-            <br>
-            <br>
-            <label>Password</label>
-            <input type="password" id="j_password" name="password" value="" required/>
-            <br>
-            <br>
-            <input type="submit" name="submit" value="Submit"/>     
-            <input type="hidden" name="action" value="getWineList" />
-        </form>
+       
              
              
              
