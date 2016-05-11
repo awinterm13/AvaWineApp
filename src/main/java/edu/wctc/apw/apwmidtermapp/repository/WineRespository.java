@@ -8,11 +8,10 @@ package edu.wctc.apw.apwmidtermapp.repository;
 import edu.wctc.apw.apwmidtermapp.entity.Wine;
 import java.io.Serializable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+
 
 /**
- *
+ * A Spring Generated class that plugs into Hibernate or EclipseLink and provides basic crud.
  * @author andre_000
  */
 public interface WineRespository extends JpaRepository<Wine, Integer>, Serializable {

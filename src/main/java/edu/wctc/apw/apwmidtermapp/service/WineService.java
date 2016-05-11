@@ -7,6 +7,7 @@ package edu.wctc.apw.apwmidtermapp.service;
 
 import edu.wctc.apw.apwmidtermapp.repository.WineRespository;
 import edu.wctc.apw.apwmidtermapp.entity.Wine;
+import edu.wctc.apw.apwmidtermapp.exception.ParameterMissingException;
 import java.util.List;
 import javax.inject.Inject;
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- *
+ * This class acts as the manager class over the WineRepository
  * @author andre_000
  */
 @Repository
@@ -27,20 +28,25 @@ public class WineService {
     private WineRespository wineRepo;
 
     
-
+/**
+ * Default constructor needed for injection
+ */
     public WineService() {
     }
-
+/**
+ *  A method that Calls the WineRepositories findAll Method.
+ * @return List of wine objects
+ */
     public List<Wine> findAll() {
         return wineRepo.findAll();
     }
     
-    /**
-     * This custom method is necessary because we are using Hibernate which
-     * does not load lazy relationships (in this case Books).
-     * @param id
-     * @return 
-     */
+//    /**
+//     * This custom method is necessary because we are using Hibernate which
+//     * does not load lazy relationships (in this case Books).
+//     * @param id
+//     * @return 
+//     */
 //    public Wine findByIdAndFetchBooksEagerly(String id) {
 //        Integer wineId = new Integer(id);
 //        
@@ -53,7 +59,15 @@ public class WineService {
 //        return author;
 //    }
 
+    /**
+ *  A method that Calls the WineRepositories findOne Method.
+     * @param id Integer 
+ * @return A wine object
+ */
     public Wine findById(String id) {
+        if(id.isEmpty()){
+             throw new ParameterMissingException();
+        }
         return wineRepo.findOne(new Integer(id));
     }
 
@@ -64,6 +78,9 @@ public class WineService {
      */
     @Transactional
     public void remove(Wine wine) {
+         if(wine == null){
+             throw new ParameterMissingException();
+        }
         LOG.debug("Deleting author: " + wine.getWineName());
         wineRepo.delete(wine);
     }
@@ -72,9 +89,13 @@ public class WineService {
      * Spring performs a transaction with readonly=false. This
      * guarantees a rollback if something goes wrong.
      * @param wine 
+     * @return  wine
      */
     @Transactional
     public Wine edit(Wine wine) {
+        if(wine == null){
+             throw new ParameterMissingException();
+        }
         return wineRepo.saveAndFlush(wine);
     }
 }

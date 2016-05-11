@@ -250,7 +250,7 @@ public class WineListController extends HttpServlet {
     }// </editor-fold>
 
     /**
-     * Init method works for connection pooling or standard connection.
+     * Init method for Injection
      *
      * @throws ServletException
      */
@@ -263,7 +263,12 @@ public class WineListController extends HttpServlet {
         wineServ = (WineService) ctx.getBean("wineService");
 
     }
-
+/**
+ * private helper method for refreshing wine list.
+ * @param request
+ * @param wineServ
+ * @throws Exception 
+ */
     private void refreshList(HttpServletRequest request, WineService wineServ) throws Exception {
         List<Wine> wineList = wineServ.findAll();
 //        System.out.println(wineList.toString());
