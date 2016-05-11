@@ -22,7 +22,9 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     </head>
     <body>
-        <jsp:include page="navBar.jsp" />
+         <jsp:include page="navBar.jsp" />
+         <sec:authorize access="hasAnyRole('ROLE_MGR')">
+      
 
         <div class="col-md-10" align="right">
             <form method="POST" action="<%= response.encodeURL("WineListController")%>"  name="addEdit">
@@ -75,7 +77,9 @@
         </div>            
 
 
-        <jsp:include page="footer.jsp" />
+       
         <script src="formValidation.js" type="text/javascript"></script>
+         </sec:authorize>
+         <jsp:include page="footer.jsp" />
     </body>
 </html>
